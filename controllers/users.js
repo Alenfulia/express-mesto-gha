@@ -1,32 +1,24 @@
 const User = require('../models/user');
-const { ERROR_BAD_REQUEST, ERROR_NOT_FOUND, ERROR_INTERNAL_SERVER } = require('../utils/utils');
+const { errorsHandler } = require('../utils/utils');
 
 // Получение пользователей
 module.exports.getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      if (users.length === 0) {
-        res.status(ERROR_NOT_FOUND).send({ message: 'Пользователи на найдены.' });
-        return;
-      }
       res.status(200).send(users);
     })
-    .catch(() => {
-      res.status(ERROR_INTERNAL_SERVER).send({ message: 'Внутренняя ошибка сервера.' });
-    });
+    .catch((err) => {
+      errorsHandler(err, res)}
+    );
 };
 
 // Получение пользователя по его id
 module.exports.getUserById = (req, res) => {
   User.findById(req.params.userId)
     .then((user) => {
-      if (!user) {
-        res.status(ERROR_NOT_FOUND).send({ message: 'Запрашиваемый пользователь не найден.' });
-        return;
-      }
       res.status(200).send(user);
     })
-    .catch(() => res.status(ERROR_BAD_REQUEST).send({ message: 'Внутренняя ошибка сервера.' }));
+    .catch((err) => errorsHandler(err, res));
 };
 
 // Создание нового пользователя
@@ -36,7 +28,7 @@ module.exports.createUser = (req, res) => {
     .then((user) => {
       res.status(200).send({ data: user });
     })
-    .catch(() => res.status(ERROR_BAD_REQUEST).send({ message: 'Внутренняя ошибка сервера.' }));
+    .catch((err) => errorsHandler(err, res));
 };
 
 // Обновление информации о пользователе
@@ -49,7 +41,7 @@ module.exports.updateUser = (req, res) => {
   )
     .then((user) =>
       res.status(200).send({ data: user }))
-    .catch(() => res.status(ERROR_BAD_REQUEST).send({ message: 'Внутренняя ошибка сервера.' }));
+    .catch((err) => errorsHandler(err, res));
 };
 
 // Обновление аватара пользователя
@@ -61,5 +53,5 @@ module.exports.updateAvatar = (req, res) => {
     { new: true },
   )
     .then((user) => res.status(200).send({ data: user }))
-    .catch(() => res.status(ERROR_BAD_REQUEST).send({ message: 'Внутренняя ошибка сервера.' }));
+    .catch((err) => errorsHandler(err, res));
 };
