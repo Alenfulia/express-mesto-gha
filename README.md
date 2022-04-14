@@ -1,6 +1,10 @@
-[![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/yandex-praktikum/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
-# Проект Mesto фронтенд + бэкенд
+[![Tests](https://github.com/Alenfulia/express-mesto-gha/actions/workflows/tests-13-sprint.yml/badge.svg)](https://github.com/Alenfulia/express-mesto-gha/actions/workflows/tests-13-sprint.yml) [![Tests](https://github.com/Alenfulia/express-mesto-gha/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/Alenfulia/express-mesto-gha/actions/workflows/tests-14-sprint.yml)
 
+# Проект Mesto фронтенд + бэкенд
+Бэкенд проекта Место.
+
+# Используемые технологии
+Node.js, Express.js, MongoDB, Mongoose
 
 
 ## Настройка бейджей статуса тестов
@@ -12,7 +16,6 @@
 
 [![Tests for sprint 14](https://github.com/${имя_пользователя}/${имя репозитория}/actions/workflows/tests-14-sprint.yml/badge.svg)](https://github.com/${имя_пользователя}/${имя репозитория}/actions/workflows/tests-14-sprint.yml)
 ```
-
 
 ## Директории
 
