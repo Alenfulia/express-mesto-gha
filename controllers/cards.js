@@ -1,5 +1,5 @@
 const Card = require('../models/card');
-const { errorsHandler } = require('../utils/utils');
+const { errorsHandler, ERROR_NOT_FOUND } = require('../utils/utils');
 
 //Получение карточек
 module.exports.getCards = (req, res) => {
@@ -23,8 +23,13 @@ module.exports.createCard = (req, res) => {
 //Удаление карточки
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
-    .then((card) =>
-      res.status(200).send(card))
+    .then((card) => {
+      if (!card) {
+        return res
+        .status(ERROR_NOT_FOUND)
+        .send({ message: 'Карточка не найдена.' })
+      }
+      res.status(200).send(card)})
     .catch((err) => errorsHandler(err, res));
 };
 
@@ -35,8 +40,13 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } },
     { new: true },
   )
-    .then((card) =>
-      res.status(200).send(card))
+    .then((card) => {
+      if (!card) {
+        return res
+        .status(ERROR_NOT_FOUND)
+        .send({ message: 'Карточка не найдена.' })
+      }
+      res.status(200).send(card)})
     .catch((err) => errorsHandler(err, res));
 };
 
@@ -47,6 +57,12 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } },
     { new: true },
   )
-    .then((card) => res.status(200).send({ data: card }))
+    .then((card) => {
+      if (!card) {
+        return res
+        .status(ERROR_NOT_FOUND)
+        .send({ message: 'Карточка не найдена.' })
+      }
+      res.status(200).send({ data: card })})
     .catch((err) => errorsHandler(err, res));
 };
