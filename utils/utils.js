@@ -14,16 +14,11 @@ const errorsHandler = (err, res) => {
       .send({ message: 'Переданы некорректные данные.' });
   }
   if (err.name === 'NotFoundError') {
-    return res
-    .status(ERROR_NOT_FOUND)
-    .send({ message: 'Данные не найдены.' });
+    return res.status(ERROR_NOT_FOUND).send({ message: 'Данные не найдены.' });
   }
 
-  return res
-  .status(ERROR_INTERNAL_SERVER)
-  .send({ message: `Ошибка сервера ${ERROR_INTERNAL_SERVER}` });
+  return res.status(ERROR_INTERNAL_SERVER).send({ message: `Ошибка сервера ${ERROR_INTERNAL_SERVER}` });
 };
-
 
 module.exports = {
   ERROR_BAD_REQUEST,

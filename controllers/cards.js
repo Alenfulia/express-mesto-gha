@@ -1,39 +1,35 @@
 const Card = require('../models/card');
 const { errorsHandler, ERROR_NOT_FOUND } = require('../utils/utils');
 
-//Получение карточек
+// Получение карточек
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .then((cards) =>
-      res.status(200).send(cards)
-    )
+    .then((cards) => res.status(200).send(cards))
     .catch((err) => errorsHandler(err, res));
 };
 
-//Добавление карточки
+// Добавление карточки
 module.exports.createCard = (req, res) => {
   const { name, link } = req.body;
   const owner = req.user._id;
   Card.create({ name, link, owner })
-    .then((card) =>
-      res.status(200).send({ data: card }))
+    .then((card) => res.status(200).send({ data: card }))
     .catch((err) => errorsHandler(err, res));
 };
 
-//Удаление карточки
+// Удаление карточки
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
-        return res
-        .status(ERROR_NOT_FOUND)
-        .send({ message: 'Карточка не найдена.' })
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Карточка не найдена.' });
       }
-      res.status(200).send(card)})
+      res.status(200).send(card);
+    })
     .catch((err) => errorsHandler(err, res));
 };
 
-//Лайк карточки
+// Лайк карточки
 module.exports.likeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
@@ -42,15 +38,14 @@ module.exports.likeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res
-        .status(ERROR_NOT_FOUND)
-        .send({ message: 'Карточка не найдена.' })
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Карточка не найдена.' });
       }
-      res.status(200).send(card)})
+      res.status(200).send(card);
+    })
     .catch((err) => errorsHandler(err, res));
 };
 
-//Снятие лайка с карточки
+// Снятие лайка с карточки
 module.exports.dislikeCard = (req, res) => {
   Card.findByIdAndUpdate(
     req.params.cardId,
@@ -59,10 +54,9 @@ module.exports.dislikeCard = (req, res) => {
   )
     .then((card) => {
       if (!card) {
-        return res
-        .status(ERROR_NOT_FOUND)
-        .send({ message: 'Карточка не найдена.' })
+        return res.status(ERROR_NOT_FOUND).send({ message: 'Карточка не найдена.' });
       }
-      res.status(200).send({ data: card })})
+      res.status(200).send({ data: card });
+    })
     .catch((err) => errorsHandler(err, res));
 };

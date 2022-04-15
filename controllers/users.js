@@ -1,5 +1,9 @@
+
 const User = require('../models/user');
-const { errorsHandler, ERROR_NOT_FOUND  } = require('../utils/utils');
+const {
+  errorsHandler,
+  ERROR_NOT_FOUND,
+} = require('../utils/utils');
 
 // Получение пользователей
 module.exports.getUsers = (req, res) => {
@@ -8,8 +12,8 @@ module.exports.getUsers = (req, res) => {
       res.status(200).send(users);
     })
     .catch((err) => {
-      errorsHandler(err, res)}
-    );
+      errorsHandler(err, res);
+    });
 };
 
 // Получение пользователя по его id
@@ -44,8 +48,7 @@ module.exports.updateUser = (req, res) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) =>
-      res.status(200).send({ data: user }))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => errorsHandler(err, res));
 };
 
