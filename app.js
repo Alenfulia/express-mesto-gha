@@ -27,6 +27,4 @@ app.use('/', require('./routes/cards'));
 
 app.use((req, res) => res.status(ERROR_NOT_FOUND).send({ message: 'Страница не найдена.' }));
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-});
+app.listen(PORT);
