@@ -115,11 +115,10 @@ module.exports.updateUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw next(new BadRequestError('Переданы некорректные данные.'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       }
-      next(err);
-    })
-    .catch(next);
+      return next(err);
+    });
 };
 
 // Обновление аватара пользователя

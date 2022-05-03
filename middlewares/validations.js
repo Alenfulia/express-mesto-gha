@@ -34,14 +34,6 @@ const userIdValidation = celebrate({
   }),
 });
 
-// Валидация обновления профиля пользователя
-const updateUserValidation = celebrate({
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    about: Joi.string().required().min(2).max(30),
-  }),
-});
-
 // валидация обновления аватара пользователя
 const updateAvatarValidation = celebrate({
   body: Joi.object().keys({
@@ -78,7 +70,6 @@ module.exports = {
   signUp,
   signIn,
   userIdValidation,
-  updateUserValidation,
   updateAvatarValidation,
   createCardValidation,
   cardIdValidation,
