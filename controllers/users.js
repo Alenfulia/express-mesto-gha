@@ -87,13 +87,13 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError('Пользователь не найден.'));
+        throw next(new NotFoundError('Пользователь не найден.'));
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new BadRequestError('Переданы неверные данные.'));
+        throw next(new BadRequestError('Переданы некорректные данные.'));
       }
       return next(err);
     });
@@ -102,9 +102,6 @@ module.exports.getUserById = (req, res, next) => {
 // Обновление информации о пользователе
 module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
-  if (!name || !about) {
-    throw new BadRequestError('Переданы некорректные данные для обновления данных пользователя.');
-  }
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
@@ -115,6 +112,12 @@ module.exports.updateUser = (req, res, next) => {
         throw new NotFoundError('Пользователь с таким id не найден.');
       }
       res.status(200).send({ data: user });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw next(new BadRequestError('Переданы некорректные данные.'));
+      }
+      next(err);
     })
     .catch(next);
 };
@@ -135,7 +138,7 @@ module.exports.updateAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Неверная ссылка.'));
+        next(new BadRequestError('Некорректная ссылка.'));
       }
       return next(err);
     });
