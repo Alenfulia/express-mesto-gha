@@ -34,6 +34,20 @@ const userIdValidation = celebrate({
   }),
 });
 
+// Валидация обновления профиля пользователя
+const updateUserValidation = celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().required().min(2).max(30),
+    about: Joi.string().required().min(2).max(30)
+      .messages({
+        'string.base': '{#label} должно быть строкой 2-30 символов.',
+        'string.min': '{#label} должно быть строкой 2-30 символов.',
+        'string.max': '{#label} должно быть строкой 2-30 символов.',
+        'string.empty': 'Пустое поле, необходимо ввести {#label}.',
+      }),
+  }),
+});
+
 // валидация обновления аватара пользователя
 const updateAvatarValidation = celebrate({
   body: Joi.object().keys({
@@ -70,6 +84,7 @@ module.exports = {
   signUp,
   signIn,
   userIdValidation,
+  updateUserValidation,
   updateAvatarValidation,
   createCardValidation,
   cardIdValidation,
