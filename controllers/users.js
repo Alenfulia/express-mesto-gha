@@ -107,12 +107,7 @@ module.exports.updateUser = (req, res, next) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь с таким id не найден.');
-      }
-      res.status(200).send({ data: user });
-    })
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные.'));
@@ -129,12 +124,7 @@ module.exports.updateAvatar = (req, res, next) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь с таким id не найден.');
-      }
-      res.status(200).send({ data: user });
-    })
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Некорректная ссылка.'));
