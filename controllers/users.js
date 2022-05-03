@@ -9,11 +9,11 @@ const NotFoundError = require('../errors/NotFoundError');
 module.exports.createUser = (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    throw new BadRequestError('Неправильный логин или пароль.');
+    next(new BadRequestError('Неправильный логин или пароль.'));
   }
   return User.findOne({ email }).then((user) => {
     if (user) {
-      throw new ConflictError(`Пользователь с ${email} уже существует.`);
+      next(new ConflictError(`Пользователь с ${email} уже существует.`));
     }
     return bcrypt.hash(password, 10);
   })
@@ -44,7 +44,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      // проверим существует ли такой email или пароль
+      // Проверим существует ли такой email или пароль
       if (!user || !password) {
         return next(new BadRequestError('Неверный email или пароль.'));
       }
@@ -62,7 +62,7 @@ module.exports.login = (req, res, next) => {
     .catch(next);
 };
 
-// Возвращает информацию о текущем пользователе
+// Возвращаем информацию о текущем пользователе
 module.exports.getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
   User.findById(_id).then((user) => {
@@ -87,11 +87,16 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        return next(new NotFoundError('Пользователь не найден'));
+        return next(new NotFoundError('Пользователь не найден.'));
       }
       return res.status(200).send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return next(new BadRequestError('Переданы неверные данные.'));
+      }
+      return next(err);
+    });
 };
 
 // Обновление информации о пользователе
@@ -102,7 +107,12 @@ module.exports.updateUser = (req, res, next) => {
     { name, about },
     { new: true, runValidators: true },
   )
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Пользователь с таким id не найден.');
+      }
+      res.status(200).send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Неверный тип данных.'));
@@ -119,10 +129,15 @@ module.exports.updateAvatar = (req, res, next) => {
     { avatar },
     { new: true, runValidators: true },
   )
-    .then((user) => res.status(200).send({ data: user }))
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError('Пользователь с таким id не найден.');
+      }
+      res.status(200).send({ data: user });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError('Неверная ссылка'));
+        next(new BadRequestError('Неверная ссылка.'));
       }
       return next(err);
     });
