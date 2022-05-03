@@ -29,10 +29,10 @@ module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (!card) {
-        return next(new NotFoundError('Карточка не найдена.'));
+        throw new NotFoundError('Карточка не найдена.');
       }
       if (card.owner.valueOf() !== req.user._id) {
-        return next(new ForbiddenError('Карточка создана другим пользователем. Можно удалить только свою карточку.'));
+        throw new ForbiddenError('Карточка создана другим пользователем. Можно удалить только свою карточку.');
       }
       card.remove();
       res.status(200).send(card);
