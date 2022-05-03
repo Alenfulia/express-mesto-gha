@@ -102,6 +102,9 @@ module.exports.getUserById = (req, res, next) => {
 // Обновление информации о пользователе
 module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
+  if (!name || !about) {
+    throw new BadRequestError('Переданы некорректные данные для обновления данных пользователя.');
+  }
   User.findByIdAndUpdate(
     req.user._id,
     { name, about },
@@ -113,12 +116,7 @@ module.exports.updateUser = (req, res, next) => {
       }
       res.status(200).send({ data: user });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError('Неверный тип данных.'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 // Обновление аватара пользователя
