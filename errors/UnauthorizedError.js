@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 class UnathorizedError extends Error {
   constructor(message) {
     super(message);

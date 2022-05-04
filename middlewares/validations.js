@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
 const BadRequestError = require('../errors/BadRequestError');
@@ -6,18 +5,48 @@ const BadRequestError = require('../errors/BadRequestError');
 // Валидация входа
 const signIn = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8).max(30),
+    email: Joi.string().required().email().messages({
+      'string.base': 'Поле должно быть строкой с {#label}.',
+      'string.email': 'Некорректный формат {#label}.',
+      'any.required': 'Необходимо ввести {#label}.',
+      'string.empty': 'Пустое поле, необходимо ввести {#label}.',
+    }),
+    password: Joi.string().required().min(8).max(30)
+      .messages({
+        'string.base': 'Некорректный формат поля {#label}. Должна быть строка.',
+        'any.required': 'Не введен {#label}, необходимо ввести {#label}.',
+        'string.empty': 'Пустое поле, необходимо ввести {#label}.',
+      }),
   }),
 });
 
 // Валидация регистрации
 const signUp = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8).max(30),
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
+    email: Joi.string().required().email().messages({
+      'string.base': 'Поле должно быть строкой с {#label}.',
+      'string.email': 'Некорректный формат {#label}.',
+      'any.required': 'Необходимо ввести {#label}.',
+      'string.empty': 'Пустое поле, необходимо ввести {#label}.',
+    }),
+    password: Joi.string().required().min(8).max(30)
+      .messages({
+        'string.base': 'Некорректный формат поля {#label}. Должна быть строка.',
+        'any.required': 'Не введен {#label}, необходимо ввести {#label}.',
+        'string.empty': 'Пустое поле, необходимо ввести {#label}.',
+      }),
+    name: Joi.string().min(2).max(30).messages({
+      'string.base': '{#label} должно быть строкой 2-30 символов.',
+      'string.min': '{#label} должно быть строкой 2-30 символов.',
+      'string.max': '{#label} должно быть строкой 2-30 символов.',
+      'string.empty': 'Пустое поле, необходимо ввести, {#label}.',
+    }),
+    about: Joi.string().min(2).max(30).messages({
+      'string.base': '{#label} должно быть строкой 2-30 символов.',
+      'string.min': '{#label} должно быть строкой 2-30 символов.',
+      'string.max': '{#label} должно быть строкой 2-30 символов.',
+      'string.empty': 'Пустое поле, необходимо ввести {#label}.',
+    }),
     avatar: Joi.string().custom((value) => {
       if (!validator.isURL(value, { require_protocol: true })) {
         throw new BadRequestError('Неправильный формат URL адреса');

@@ -87,13 +87,13 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        throw next(new NotFoundError('Пользователь не найден.'));
+        return next(new NotFoundError('Пользователь не найден.'));
       }
       return res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw next(new BadRequestError('Переданы некорректные данные.'));
+        next(new BadRequestError('Переданы некорректные данные.'));
       }
       return next(err);
     });

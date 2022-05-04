@@ -34,10 +34,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default:
       'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
-    validate: {
-      validator: (value) => /(https|http):\/\/(www.)?[a-zA-Z0-9-_]+\.[a-zA-Z]+(\/[a-zA-Z0-9-._/~:@!$&'()*+,;=]*$)?/i.test(value),
-      message: 'Неправильный формат URL адреса',
-    },
   },
 });
 
@@ -45,16 +41,15 @@ const userSchema = new mongoose.Schema({
 // eslint-disable-next-line func-names
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password').then((user) => {
-    // пользователь не нашёлся — отклоняем промис
+    // Пользователь не нашёлся — отклоняем промис
     if (!user) {
-      throw new UnathorizedError('Неправильные почта или пароль');
+      throw new UnathorizedError('Неправильные почта или пароль.');
     }
-
     // Нашёлся — сравниваем хеши
     return bcrypt.compare(password, user.password).then((matched) => {
       // Хеши не совпали — отклоняем промис
       if (!matched) {
-        throw new UnathorizedError('Неправильные почта или пароль');
+        throw new UnathorizedError('Неправильные почта или пароль.');
       }
       // Аутентификация успешна
       return user;
