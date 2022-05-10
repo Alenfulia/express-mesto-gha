@@ -42,8 +42,7 @@ module.exports.deleteCard = (req, res, next) => {
         return next(new BadRequestError('Передан некорректный id.'));
       }
       return next(err);
-    })
-    .catch(next);
+    });
 };
 
 // Лайк карточки
@@ -64,8 +63,7 @@ module.exports.likeCard = (req, res, next) => {
         return next(new BadRequestError('Передан некорректный id.'));
       }
       return next(err);
-    })
-    .catch(next);
+    });
 };
 
 // Снятие лайка с карточки
@@ -86,6 +84,5 @@ module.exports.dislikeCard = (req, res, next) => {
         return next(new BadRequestError('Передан некорректный id.'));
       }
       return next(err);
-    })
-    .catch(next);
+    });
 };
